@@ -57,7 +57,7 @@ from tobrot.plugins.incoming_message_fn import (g_clonee, g_yt_playlist,
                                                 rename_tg_file)
 from tobrot.plugins.new_join_fn import help_message_f, new_join_f
 from tobrot.plugins.rclone_size import check_size_g, g_clearme
-from tobrot.helper_funcs.zee5_dl import zee5_capture, zee5_execute
+from tobrot.plugins.incoming_message_fn import incoming_zee_dl_f
 from tobrot.plugins.status_message_fn import (
     cancel_message_f,
     eval_message_f,
