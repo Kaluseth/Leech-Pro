@@ -37,6 +37,7 @@ from tobrot import (
     TELEGRAM_LEECH_COMMAND,
     UPLOAD_COMMAND,
     YTDL_COMMAND,
+    ZEE_COMMAND,
     GYTDL_COMMAND,
     GPYTDL_COMMAND,
     TOGGLE_VID,
@@ -56,6 +57,7 @@ from tobrot.plugins.incoming_message_fn import (g_clonee, g_yt_playlist,
                                                 rename_tg_file)
 from tobrot.plugins.new_join_fn import help_message_f, new_join_f
 from tobrot.plugins.rclone_size import check_size_g, g_clearme
+from tobrot.helper_funcs.zee5_dl import zee5_capture, zee5_execute
 from tobrot.plugins.status_message_fn import (
     cancel_message_f,
     eval_message_f,
@@ -128,7 +130,20 @@ if __name__ == "__main__":
         filters=filters.command([YTDL_COMMAND, GYTDL_COMMAND])
         & filters.chat(chats=AUTH_CHANNEL),
     )
+    app.add_handler(incoming_youtube_dl_handler)    ##############################################################################
+    incoming_youtube_dl_handler = MessageHandler(
+        incoming_youtube_dl_f,
+        filters=filters.command([YTDL_COMMAND, GYTDL_COMMAND])
+        & filters.chat(chats=AUTH_CHANNEL),
+    )
     app.add_handler(incoming_youtube_dl_handler)
+    ##############################################################################
+    incoming_zee_dl_handler = MessageHandler(
+        incoming_youtube_dl_f,
+        filters=filters.command([ZEE_COMMAND])
+        & filters.chat(chats=AUTH_CHANNEL),
+    )
+    app.add_handler(incoming_zee_dl_handler)
     ##############################################################################
     incoming_youtube_playlist_dl_handler = MessageHandler(
         g_yt_playlist,
@@ -238,7 +253,7 @@ if __name__ == "__main__":
     app.add_handler(upload_as_video_handler)
     ##############################################################################
     
-    logging.info(f"@{(app.get_me()).username} Has Started Running...🏃💨💨 Now gimme 100$ 🐸")
+    logging.info(f"@{(app.get_me()).username} Has Started Running...馃弮馃挩馃挩 Now gimme 100$ 馃惛")
     
     idle()
     
