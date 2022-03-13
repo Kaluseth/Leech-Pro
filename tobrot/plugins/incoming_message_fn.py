@@ -31,7 +31,7 @@ from tobrot.helper_funcs.download_aria_p_n import (
     call_apropriate_function,
 )
 from tobrot.helper_funcs.download_from_link import request_download
-from tobrot.plugins.zee5_dl import zee5_execute
+from tobrot.helper_funcs.zee5_dl import zee5_execute
 from tobrot.helper_funcs.extract_link_from_message import extract_link
 from tobrot.helper_funcs.upload_to_tg import upload_to_tg
 from tobrot.helper_funcs.youtube_dl_extractor import extract_youtube_dl_formats
