@@ -19,6 +19,7 @@ from tobrot import (
     LEECH_ZIP_COMMAND,
     LOGGER,
     YTDL_COMMAND,
+    ZEE_COMMAND,
     GPYTDL_COMMAND,
     PYTDL_COMMAND,
 )
@@ -30,6 +31,7 @@ from tobrot.helper_funcs.download_aria_p_n import (
     call_apropriate_function,
 )
 from tobrot.helper_funcs.download_from_link import request_download
+from tobrot.plugins.zee5_dl import zee5_execute
 from tobrot.helper_funcs.extract_link_from_message import extract_link
 from tobrot.helper_funcs.upload_to_tg import upload_to_tg
 from tobrot.helper_funcs.youtube_dl_extractor import extract_youtube_dl_formats
@@ -194,6 +196,60 @@ async def incoming_youtube_dl_f(client, message):
             f"<b>API Error</b>: {cf_name}"
         )
 
+#zee
+async def incoming_youtube_dl_f(client, message):
+    """ /zee command """
+    current_user_id = message.from_user.id
+
+    i_m_sefg = await message.reply_text("<code>Prrocessing...🔃</code>", quote=True)
+    # LOGGER.info(message)
+    # extract link from message
+    if message.reply_to_message:
+        dl_url, cf_name, yt_dl_user_name, yt_dl_pass_word = await extract_link(
+            message.reply_to_message, "YTDL"
+        )
+        LOGGER.info(dl_url)
+        LOGGER.info(cf_name)
+    elif len(message.command) == 2:
+        dl_url = message.command[1]
+        LOGGER.info(dl_url)
+        cf_name = None
+        yt_dl_user_name = None
+        yt_dl_pass_word = None
+        cf_name = None
+    else:
+        await i_m_sefg.edit("<b>🐈 Oops Reply To YTDL Supported Link.</b>")
+        return
+    if dl_url is not None:
+        await i_m_sefg.edit_text("<b>Getting Available Formate</b>...")
+        # create an unique directory
+        user_working_dir = os.path.join(DOWNLOAD_LOCATION, str(current_user_id))
+        # create download directory, if not exist
+        if not os.path.isdir(user_working_dir):
+            os.makedirs(user_working_dir)
+        # list the formats, and display in button markup formats
+        thumb_image, text_message, reply_markup = await zee5_execute(bot, update)
+        if thumb_image is not None:
+            req = requests.get(f"{thumb_image}")
+            thumb_img = f"{current_user_id}.jpg"
+            with open(thumb_img, "wb") as thumb:
+                thumb.write(req.content)
+            await message.reply_photo(
+                # text_message,
+                photo=thumb_img,
+                quote=True,
+                caption=text_message,
+                reply_markup=reply_markup,
+            )
+            await i_m_sefg.delete()
+        else:
+            await i_m_sefg.edit_text(text=text_message, reply_markup=reply_markup)
+    else:
+        await i_m_sefg.edit_text(
+            "**FCUK**! wat have you entered.\n"
+            f"<b>API Error</b>: {cf_name}"
+        )
+
 
 # playlist
 async def g_yt_playlist(client, message):
@@ -278,7 +334,7 @@ async def rename_tg_file(client, message):
                 message_id = final_response[key_f_res_se]
                 channel_id = str(message.chat.id)[4:]
                 private_link = f"https://t.me/c/{channel_id}/{message_id}"
-                message_to_send += "➪ <a href='"
+                message_to_send += "➄1�7 <a href='"
                 message_to_send += private_link
                 message_to_send += "'>"
                 message_to_send += local_file_name
@@ -300,5 +356,5 @@ async def rename_tg_file(client, message):
 
     else:
         await message.reply_text(
-            "<b> Oops 😬</b>\n\nProvide Name with extension\n\n➩<b>Example</b>: <code> /rename Avengers Endgame.mkv</code>", quote=True
+            "<b> Oops 😬</b>\n\nProvide Name with extension\n\n➄1�7<b>Example</b>: <code> /rename Avengers Endgame.mkv</code>", quote=True
         )
