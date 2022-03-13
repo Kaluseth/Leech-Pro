@@ -10,14 +10,8 @@ import ffmpeg
 import asyncio
 import subprocess
 import requests
-from tobrot import AUTH_CHANNEL, DOWNLOAD_LOCATION, DEF_THUMB_NAIL_VID_S, LOGGER, ZEE_COMMAND
+from tobrot import AUTH_CHANNEL, DOWNLOAD_LOCATION, CHUNK_SIZE, TG_MAX_FILE_SIZE, DEF_THUMB_NAIL_VID_S, LOGGER, ZEE_COMMAND
 from script import script
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
-else:
-    from config import Config
-
-
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -110,7 +104,7 @@ async def zee5_capture(bot, update):
             if "\n" in x_reponse:
                 x_reponse, _ = x_reponse.split("\n")
             response_json = json.loads(x_reponse)
-            save_ytdl_json_path = Config.DOWNLOAD_LOCATION + \
+            save_ytdl_json_path = DOWNLOAD_LOCATION + \
                 "/" + str(update.from_user.id) + ".json"
             with open(save_ytdl_json_path, "w", encoding="utf8") as outfile:
                 json.dump(response_json, outfile, ensure_ascii=False)
@@ -162,9 +156,9 @@ async def zee5_capture(bot, update):
                    thumbnail_image = response_json["thumbnail"]
             thumb_image_path = DownLoadFile(
                 thumbnail_image,
-                Config.DOWNLOAD_LOCATION + "/" +
+                DOWNLOAD_LOCATION + "/" +
                 str(update.from_user.id) + ".jpg",
-                Config.CHUNK_SIZE,
+                CHUNK_SIZE,
                 None,  # bot,
                 script.DOWNLOAD_START,
                 update.message_id,
@@ -202,10 +196,10 @@ async def zee5_execute(bot, update):
         )
             return False, None
         
-        thumb_image_path = Config.DOWNLOAD_LOCATION + \
+        thumb_image_path = DOWNLOAD_LOCATION + \
             "/" + str(update.from_user.id) + ".jpg"
 
-        save_ytdl_json_path = Config.DOWNLOAD_LOCATION + \
+        save_ytdl_json_path = DOWNLOAD_LOCATION + \
             "/" + str(update.from_user.id) + ".json"
         try:
             with open(save_ytdl_json_path, "r", encoding="utf8") as f:
@@ -233,7 +227,7 @@ async def zee5_execute(bot, update):
         )
         description = script.CUSTOM_CAPTION_UL_FILE.format(newname=custom_file_name)
 
-        tmp_directory_for_each_user = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
+        tmp_directory_for_each_user = DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
         if not os.path.isdir(tmp_directory_for_each_user):
             os.makedirs(tmp_directory_for_each_user)
         download_directory = tmp_directory_for_each_user + "/" + custom_file_name
@@ -270,7 +264,7 @@ async def zee5_execute(bot, update):
             command_to_exec = [
                 "youtube-dl",
                 "-c",
-                "--max-filesize", str(Config.TG_MAX_FILE_SIZE),
+                "--max-filesize", str(TG_MAX_FILE_SIZE),
                 "-f", minus_f_format,
                 "--hls-prefer-ffmpeg", youtube_dl_url,
                 "-o", download_directory
@@ -302,13 +296,13 @@ async def zee5_execute(bot, update):
             os.remove(save_ytdl_json_path)
             end_one = datetime.now()
             time_taken_for_download = (end_one -start).seconds
-            file_size = Config.TG_MAX_FILE_SIZE + 1
+            file_size = TG_MAX_FILE_SIZE + 1
             try:
                 file_size = os.stat(download_directory).st_size
             except FileNotFoundError as exc:
                 download_directory = os.path.splitext(download_directory)[0] + "." + "mp4"
                 file_size = os.stat(download_directory).st_size
-            if file_size > Config.TG_MAX_FILE_SIZE:
+            if file_size > TG_MAX_FILE_SIZE:
                 await bot.edit_message_text(
                     chat_id=update.message.chat.id,
                     text=script.RCHD_TG_API_LIMIT.format(time_taken_for_download, humanbytes(file_size)),
