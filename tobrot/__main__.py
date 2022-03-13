@@ -139,7 +139,7 @@ if __name__ == "__main__":
     app.add_handler(incoming_youtube_dl_handler)
     ##############################################################################
     incoming_zee_dl_handler = MessageHandler(
-        incoming_youtube_dl_f,
+        incoming_zee_dl_f,
         filters=filters.command([ZEE_COMMAND])
         & filters.chat(chats=AUTH_CHANNEL),
     )
