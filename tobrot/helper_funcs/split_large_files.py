@@ -43,14 +43,14 @@ async def split_large_files(input_file):
         input_extension = base_name.split(".")[-1]
         LOGGER.info(input_extension)
 
-        i = 0
+        i = 1
         flag = False
 
         while end_time <= total_duration:
             LOGGER.info(i)
             # file name generate
-            parted_file_name = "{}_PART_{}.{}".format(
-                str(base_name), str(i).zfill(5), str(input_extension)
+            parted_file_name = "{}_{}.{}".format(
+                str(base_name), str(i).zfill(2), str(input_extension)
             )
 
             output_file = os.path.join(new_working_directory, parted_file_name)
