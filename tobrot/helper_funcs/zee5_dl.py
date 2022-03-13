@@ -191,16 +191,16 @@ async def zee5_execute(bot, update):
     try:
         cb_data = update.data
         tg_send_type, youtube_dl_format, youtube_dl_ext = cb_data.split("|")
-current_user_id = update.message.reply_to_message.from_user.id
-    current_touched_user_id = update.from_user.id
-    if current_user_id != current_touched_user_id:
+        current_user_id = update.message.reply_to_message.from_user.id
+        current_touched_user_id = update.from_user.id
+        if current_user_id != current_touched_user_id:
         await bot.answer_callback_query(
             callback_query_id=update.id,
             text="Dont Touch On This. This Leech isnt started by you..馃槨馃槨馃槨",
             show_alert=True,
             cache_time=0,
         )
-        return False, None
+            return False, None
         
         thumb_image_path = Config.DOWNLOAD_LOCATION + \
             "/" + str(update.from_user.id) + ".jpg"
