@@ -32,7 +32,7 @@ from tobrot.helper_funcs.download_aria_p_n import (
     call_apropriate_function,
 )
 from tobrot.helper_funcs.download_from_link import request_download
-from tobrot.helper_funcs.zee5_dl import zee5_execute
+from tobrot.helper_funcs.zee_dl_extractor import extract_zee_dl_formats
 from tobrot.helper_funcs.extract_link_from_message import extract_link
 from tobrot.helper_funcs.upload_to_tg import upload_to_tg
 from tobrot.helper_funcs.youtube_dl_extractor import extract_youtube_dl_formats
@@ -230,7 +230,9 @@ async def incoming_zee_dl_f(client, message):
         if not os.path.isdir(user_working_dir):
             os.makedirs(user_working_dir)
         # list the formats, and display in button markup formats
-        thumb_image, text_message, reply_markup = await zee5_execute(bot, update)
+        thumb_image, text_message, reply_markup = await extract_zee_dl_formats(
+            dl_url, cf_name, yt_dl_user_name, yt_dl_pass_word, user_working_dir
+        )
         if thumb_image is not None:
             req = requests.get(f"{thumb_image}")
             thumb_img = f"{current_user_id}.jpg"
