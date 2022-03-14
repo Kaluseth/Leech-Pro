@@ -32,7 +32,7 @@ async def button(bot, update: CallbackQuery):
         else:
             await bot.answer_callback_query(
                 callback_query_id=update.id,
-                text="This Is Not Your Leech. So, dont touch on this...😡😡",
+                text="This Is Not Your Leech. So, dont touch on this...馃槨馃槨",
                 show_alert=True,
                 cache_time=0,
             )
@@ -42,6 +42,12 @@ async def button(bot, update: CallbackQuery):
             update.id, text="trying to download...", show_alert=False
         )
         await youtube_dl_call_back(bot, update)
+        return
+    if "zee5" in cb_data:
+        await bot.answer_callback_query(
+            update.id, text="trying to download...", show_alert=False
+        )
+        await zee5_execute(bot, update)
         return
     if cb_data.startswith("rclone"):
         await bot.answer_callback_query(
@@ -83,7 +89,7 @@ async def button(bot, update: CallbackQuery):
         else:
             await bot.answer_callback_query(
                 callback_query_id=update.id,
-                text="who are you? 🤪🤔🤔🤔",
+                text="who are you? 馃お馃馃馃",
                 show_alert=True,
                 cache_time=0,
             )
@@ -129,13 +135,13 @@ async def button(bot, update: CallbackQuery):
                         os.remove(f)
                     else:
                         shutil.rmtree(f)
-                await update.message.edit_text(f"Deleted {len(g_del_list)} objects 🚮")
+                await update.message.edit_text(f"Deleted {len(g_del_list)} objects 馃毊")
             else:
-                await update.message.edit_text("Nothing to clear 🙄")
+                await update.message.edit_text("Nothing to clear 馃檮")
         else:
-            await update.message.edit_text("You are not allowed to do that 🤭")
+            await update.message.edit_text("You are not allowed to do that 馃き")
     elif cb_data == "fuckoff":
         await bot.answer_callback_query(
             update.id, text="trying to cancel...", show_alert=False
         )
-        await update.message.edit_text("Okay! fine 🤬")
+        await update.message.edit_text("Okay! fine 馃が")
