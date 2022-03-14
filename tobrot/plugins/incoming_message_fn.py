@@ -9,6 +9,7 @@ import time
 from pathlib import Path
 import aria2p
 import requests
+import pyrogram
 from tobrot import (
     DOWNLOAD_LOCATION,
     GLEECH_COMMAND,
@@ -197,6 +198,7 @@ async def incoming_youtube_dl_f(client, message):
         )
 
 #zee
+@pyrogram.Client.on_callback_query()
 async def incoming_zee_dl_f(client, message):
     """ /zee command """
     current_user_id = message.from_user.id
